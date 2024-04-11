@@ -45,8 +45,23 @@ class PaymentApp(App):
     # instance es el widget que generó el evento
     # value es el valor actual que tiene el widget
     def calcular_cuota( self, value ):
-        cuota = CreditCardCalculator.calcPayment( amount=float(self.compra.text),number_of_payments = int(self.cuotas.text), interest=float(self.tasa.text) )
-        self.resultado.text = str( round( cuota, 2)  )
+        try:
+            cuota = CreditCardCalculator.calcPayment( amount=float(self.compra.text),number_of_payments = int(self.cuotas.text), interest=float(self.tasa.text) )
+            self.resultado.text = str( round( cuota, 2)  )
+
+        except ValueError as err:
+            self.resultado.text = "El valor ingresado no es un numero válido. Ingrese un numero correcto, por ejemplo 500000.00"
+        except Exception as err:
+            self.mostrar_error( err )
+        
+    def mostrar_error( self, err ):
+        contenido = GridLayout(cols=1)
+        contenido.add_widget( Label(text= str(err) ) )
+        cerrar = Button(text="Cerrar" )
+        contenido.add_widget( cerrar )
+        popup = Popup(content=contenido)
+        cerrar.bind( on_press=popup.dismiss)
+        popup.open()
 
 
 
