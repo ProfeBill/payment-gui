@@ -31,7 +31,7 @@ class PaymentApp(App):
         contenedor.add_widget(self.tasa)
 
         self.resultado = Label()
-        contenedor.add_widget(resultado)
+        contenedor.add_widget(self.resultado)
 
         calcular = Button(text="Calcular",font_size=40)
         contenedor.add_widget(calcular)
@@ -45,19 +45,9 @@ class PaymentApp(App):
     # instance es el widget que generó el evento
     # value es el valor actual que tiene el widget
     def calcular_cuota( self, value ):
-        try:
-            self.resultado.text = CreditCardCalculator.calcPayment( float(self.compra.text), int(self.cuotas.text), float(self.interes.text) )
-        except Exception as err:
-            self.mostrar_error( err)
+        cuota = CreditCardCalculator.calcPayment( amount=float(self.compra.text),number_of_payments = int(self.cuotas.text), interest=float(self.tasa.text) )
+        self.resultado.text = str( round( cuota, 2)  )
 
-    def mostrar_error( self, err ):
-        contenido = GridLayout(cols=1)
-        contenido.add_widget( Label(text= str(err) ) )
-        cerrar = Button(text="Cerrar" )
-        contenido.add_widget( cerrar )
-        popup = Popup(content=contenido)
-        cerrar.bind( on_press=popup.dismiss)
-        popup.open()
 
 
 if __name__ == "__main__":

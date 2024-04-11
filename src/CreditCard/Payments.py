@@ -107,7 +107,7 @@ class CreditCardCalculator:
         if amount <= 0 :
             raise InvalidPurchaseException()
 
-    def CheckPayments(amount, periods):
+    def CheckPayments(periods):
         if periods <= 0 :
             raise InvalidumberOfPaymentsException()
 
