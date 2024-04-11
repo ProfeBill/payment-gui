@@ -46,6 +46,7 @@ class PaymentApp(App):
     # value es el valor actual que tiene el widget
     def calcular_cuota( self, value ):
         try:
+            self.validar()
             cuota = CreditCardCalculator.calcPayment( amount=float(self.compra.text),number_of_payments = int(self.cuotas.text), interest=float(self.tasa.text) )
             self.resultado.text = str( round( cuota, 2)  )
 
@@ -59,9 +60,22 @@ class PaymentApp(App):
         contenido.add_widget( Label(text= str(err) ) )
         cerrar = Button(text="Cerrar" )
         contenido.add_widget( cerrar )
-        popup = Popup(content=contenido)
+        popup = Popup(title="Error",content=contenido)
         cerrar.bind( on_press=popup.dismiss)
         popup.open()
+
+    def validar(self):
+        """
+        Verifica que todos datos ingresados por el usuario sean correctos
+        """
+        if( not( self.compra.text.isnumeric() )  ):
+            raise Exception( "El Valor de la compra debe ser un número válido"  )
+        
+        if( not( self.cuotas.text.isnumeric() )  ):
+            raise Exception( "El Número de Cuotas debe ser un número válido"  )
+
+        if( not( self.tasa.text.isnumeric() )  ):
+            raise Exception( "La tasa de interés debe ser un número válido, sin signo de porcentaje"  )
 
 
 
